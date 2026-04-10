@@ -139,23 +139,20 @@ The skill is just markdown files. Every tool below reads the same content. Pick 
 Skills are file-based — Claude Code discovers them automatically from `~/.claude/skills/` (personal) or `.claude/skills/` (project-specific).
 
 **Personal skill (available in all your projects):**
+> Clone the repo and copy the skill into your personal skills directory:
 
 ```bash
-# Clone the repo
 git clone https://github.com/aldefy/compose-skill.git /tmp/compose-skill
-
-# Copy into your personal skills directory
 mkdir -p ~/.claude/skills
 cp -r /tmp/compose-skill/jetpack-compose-expert-skill ~/.claude/skills/
 ```
 
 **Project-specific skill (just one project):**
 
-```bash
-# Clone the repo
-git clone https://github.com/aldefy/compose-skill.git /tmp/compose-skill
+> Clone the repo and copy the skill into your project's `.claude/skills` directory:
 
-# Copy into your project's .claude/skills directory
+```bash
+git clone https://github.com/aldefy/compose-skill.git /tmp/compose-skill
 mkdir -p .claude/skills
 cp -r /tmp/compose-skill/jetpack-compose-expert-skill .claude/skills/
 ```
