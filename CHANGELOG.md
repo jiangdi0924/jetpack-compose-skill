@@ -2,6 +2,34 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.0] - 2026-04-15
+
+### Changed (distribution)
+
+- **Plugin distribution is now the supported install path.** Users who copied
+  `jetpack-compose-expert-skill/` into `~/.claude/skills/` (or equivalent) are
+  on an unmaintained path. See `docs/MIGRATION.md`.
+- `SKILL.md` now carries a `version:` frontmatter field and a migration banner.
+  The banner will remain through v2.x and escalate in v3.0.
+
+### Added
+
+- Claude Code plugin manifest (`.claude-plugin/plugin.json`) and marketplace
+  entry (`.claude-plugin/marketplace.json`).
+- Copilot CLI plugin manifest (`.copilot/plugin.yaml`).
+- GitHub Actions release workflow that asserts version consistency across five
+  locations and publishes a GitHub Release on every `v*` tag.
+- `docs/INSTALL.md` and `docs/MIGRATION.md`.
+- `CONTRIBUTING.md` documenting the release flow.
+
+### Migration notes
+
+- **Claude Code:** `/plugin marketplace add aldefy/compose-skill` →
+  `/plugin install compose-expert`. Future updates: `/plugin update`.
+- **Copilot CLI:** `copilot plugin install aldefy/compose-skill`.
+- **Codex CLI:** no native plugin system — see `docs/INSTALL.md` for the
+  git-clone + symlink path.
+
 ## [2.0.0] - 2026-04-04
 
 ### Added

@@ -18,7 +18,7 @@ description: >
   "check this diff", or any GitHub PR URL (github.com/.*/pull/), or asks about modern
   Kotlin UI development patterns. Even casual mentions like "my compose screen is slow"
   or "how do I pass data between screens" or "how do I build a TV app" should trigger this skill.
-version: 2.0.0
+version: 2.1.0
 ---
 
 > **Installation notice:** This skill is now distributed as a plugin.
