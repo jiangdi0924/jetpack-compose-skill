@@ -19,6 +19,22 @@
 
 ---
 
+## Install
+
+This skill is distributed as a plugin. See **[docs/INSTALL.md](docs/INSTALL.md)** for per-host instructions:
+
+- **Claude Code:** `/plugin marketplace add aldefy/compose-skill` → `/plugin install compose-expert`
+- **Copilot CLI:** `copilot plugin install aldefy/compose-skill`
+- **Codex CLI:** manual install — see INSTALL.md.
+
+Already installed manually? See **[docs/MIGRATION.md](docs/MIGRATION.md)**.
+
+## Updates
+
+New versions are published as [GitHub Releases](https://github.com/aldefy/compose-skill/releases) with migration notes. Run `/plugin update` (Claude Code) or `copilot plugin update aldefy/compose-skill` (Copilot) to pick them up.
+
+---
+
 ## The problem
 
 AI coding tools generate Compose code that compiles but gets the details wrong. Incorrect `remember` usage, unstable recompositions, broken modifier ordering, deprecated navigation patterns, hallucinated APIs that don't exist. They guess at behavior instead of knowing it.

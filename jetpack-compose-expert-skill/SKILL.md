@@ -21,7 +21,18 @@ description: >
   Kotlin UI development patterns. Even casual mentions like "my compose screen is slow"
   or "how do I pass data between screens" or "how do I build a TV app" should trigger this skill.
   Also trigger on session_start to auto-detect Compose projects — see references/auto-init.md.
+version: 2.1.0
 ---
+
+> **Installation notice:** This skill is now distributed as a plugin.
+> If you copied files into `~/.claude/skills/` manually, you are on an
+> unmaintained install path and will not receive updates. Migrate via:
+>
+>     /plugin marketplace add aldefy/compose-skill
+>     /plugin install compose-expert
+>
+> See [MIGRATION.md](../docs/MIGRATION.md) for Codex and Copilot CLI instructions.
+> This banner will remain through v2.x and escalate in v3.0.
 
 # Compose Expert Skill
 
