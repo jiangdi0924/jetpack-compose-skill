@@ -1,26 +1,18 @@
 ---
 name: compose-expert
 description: >
-  Compose and Compose Multiplatform expert skill for UI development across Android, Desktop,
-  iOS, and Web. Guides state management, view composition, animations, navigation, performance,
-  design-to-code workflows, and production crash patterns. Backed by actual source code analysis
-  from both androidx/androidx and JetBrains/compose-multiplatform-core.
-  Use this skill whenever the user mentions Compose, @Composable, remember, LaunchedEffect,
-  Scaffold, NavHost, MaterialTheme, LazyColumn, Modifier, recomposition, Style, styleable,
-  MutableStyleState, Compose Multiplatform, CMP, KMP, commonMain, expect, actual,
-  ComposeUIViewController, Window composable, UIKitView, ComposeViewport, Res.drawable,
-  Res.string, or any Compose API. Also trigger when the user says "Android UI", "Kotlin UI",
-  "compose layout", "compose navigation", "compose animation", "material3", "compose styles",
-  "compose multiplatform", "desktop compose", "iOS compose", "compose web", "design to compose",
-  "build this UI", "implement this design", "Android TV", "Google TV", "tv-material",
-  "tv-foundation", "Carousel", "NavigationDrawer", "D-pad", "focus indication",
-  "10-foot UI", "living room", "tv compose", "review this PR", "review this code",
-  "check this diff", or any GitHub PR URL (github.com/.*/pull/),
-  "design system", "component library", "atomic", "reusable component",
-  "design tokens", "atoms", "molecules", or asks about modern
-  Kotlin UI development patterns. Even casual mentions like "my compose screen is slow"
-  or "how do I pass data between screens" or "how do I build a TV app" should trigger this skill.
-  Also trigger on session_start to auto-detect Compose projects — see references/auto-init.md.
+  Compose and Compose Multiplatform expert for Android, Desktop, iOS, and Web UI. Covers
+  state, composition, animations, navigation, performance, design-to-code, atomic design,
+  TV Compose, M3 motion, and crash patterns. Backed by source from androidx/androidx and
+  JetBrains/compose-multiplatform-core. Trigger on mentions of Compose, @Composable,
+  remember, LaunchedEffect, NavHost, MaterialTheme, LazyColumn, Modifier, recomposition,
+  Style/styleable, CMP, KMP, expect/actual, UIKitView, ComposeViewport, Res.drawable, or
+  any Compose API. Also on phrases like "Android UI", "Kotlin UI", "compose layout/nav/
+  animation", "material3", "compose multiplatform", "desktop/iOS/web compose", "design to
+  compose", "build this UI", "Android TV", "tv-material", "D-pad", "10-foot UI", "review
+  this PR/code/diff", any github.com/*/pull/ URL, "design system", "atoms/molecules",
+  "design tokens". Casual mentions like "my compose screen is slow" also trigger.
+  Auto-detect on session_start — see references/auto-init.md.
 version: 2.1.2
 ---
 

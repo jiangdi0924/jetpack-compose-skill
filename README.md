@@ -5,12 +5,12 @@
 <h1 align="center">Compose Agent Skill</h1>
 
 <p align="center">
-  Make your AI coding tool actually understand Compose — Android, Desktop, iOS, and Web.<br/>
-  Backed by real source code from <code>androidx/androidx</code> and <code>compose-multiplatform-core</code> — not vibes.
+  让你的 AI 编程工具真正理解 Compose —— 覆盖 Android、桌面、iOS 和 Web。<br/>
+  基于 <code>androidx/androidx</code> 和 <code>compose-multiplatform-core</code> 的真实源码 —— 不靠瞎猜。
 </p>
 
 <p align="center">
-  <a href="#setup"><img src="https://img.shields.io/badge/setup-5%20min-brightgreen" alt="Setup time"/></a>
+  <a href="#安装"><img src="https://img.shields.io/badge/setup-5%20min-brightgreen" alt="Setup time"/></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="License"/></a>
   <a href="https://developer.android.com/jetpack/compose"><img src="https://img.shields.io/badge/Jetpack%20Compose-1.7+-4285F4" alt="Compose version"/></a>
   <a href="https://www.jetbrains.com/lp/compose-multiplatform/"><img src="https://img.shields.io/badge/Compose%20Multiplatform-1.8+-7F52FF" alt="CMP version"/></a>
@@ -19,81 +19,81 @@
 
 ---
 
-## Install
+## 安装
 
-This skill is distributed as a plugin. See **[docs/INSTALL.md](docs/INSTALL.md)** for per-host instructions:
+本 Skill 以插件（Plugin）形式分发。详细安装说明见 **[docs/INSTALL.md](docs/INSTALL.md)**：
 
 - **Claude Code:** `/plugin marketplace add aldefy/compose-skill` → `/plugin install compose-expert`
 - **Copilot CLI:** `copilot plugin install aldefy/compose-skill`
-- **Codex CLI:** manual install — see INSTALL.md.
+- **Codex CLI:** 需手动安装 —— 见 INSTALL.md。
 
-Already installed manually? See **[docs/MIGRATION.md](docs/MIGRATION.md)**.
+之前手动安装过？请参考 **[docs/MIGRATION.md](docs/MIGRATION.md)** 进行迁移。
 
-## Updates
+## 更新
 
-New versions are published as [GitHub Releases](https://github.com/aldefy/compose-skill/releases) with migration notes. Run `/plugin update` (Claude Code) or `copilot plugin update aldefy/compose-skill` (Copilot) to pick them up.
+新版本会发布在 [GitHub Releases](https://github.com/aldefy/compose-skill/releases) 并附带迁移说明。运行 `/plugin update`（Claude Code）或 `copilot plugin update aldefy/compose-skill`（Copilot）即可获取更新。
 
 ---
 
-## The problem
+## 解决的问题
 
-AI coding tools generate Compose code that compiles but gets the details wrong. Incorrect `remember` usage, unstable recompositions, broken modifier ordering, deprecated navigation patterns, hallucinated APIs that don't exist. They guess at behavior instead of knowing it.
+AI 编程工具生成的 Compose 代码能编译，但常常在细节上出错：错误使用 `remember`、不稳定的重组、Modifier 顺序错乱、过时的导航写法、凭空捏造的 API。它们靠猜测，而不是了解真实行为。
 
-This skill fixes that by giving your AI assistant two things:
+本 Skill 通过两件事来解决这个问题：
 
-1. **20 reference guides** covering every major Compose topic — including Compose Multiplatform, Android TV, Material 3 motion, atomic design systems, design-to-code workflows, animation recipes, and production crash patterns
-2. **6 source code files** pulled directly from [`androidx/androidx`](https://github.com/androidx/androidx/tree/androidx-main/compose) and [`compose-multiplatform-core`](https://github.com/JetBrains/compose-multiplatform-core) so the agent can check how things actually work
+1. **20 份参考指南** 涵盖所有主要 Compose 主题 —— 包括 Compose Multiplatform、Android TV、Material 3 动效、原子化设计系统、设计稿到代码的工作流、动画配方、生产环境崩溃模式
+2. **6 份源码文件** 直接来自 [`androidx/androidx`](https://github.com/androidx/androidx/tree/androidx-main/compose) 和 [`compose-multiplatform-core`](https://github.com/JetBrains/compose-multiplatform-core)，让 Agent 可以核对真实实现
 
-## What changes when you install it
+## 安装后的差异
 
-| Area | Without the skill | With it |
+| 领域 | 不装 Skill | 装了 Skill |
 |---|---|---|
-| State | Uses `remember { mutableStateOf() }` everywhere, even when `derivedStateOf` or `rememberSaveable` is the right call | Picks the right state primitive for each situation |
-| Performance | Generates code that recomposes every frame | Applies stability annotations, deferred reads, `key {}` on lists |
-| Navigation | String-based routes (deprecated) | Type-safe routes with `@Serializable` route classes |
-| Modifiers | Random ordering, misses `clickable` before `padding` bugs | Correct ordering with reasoning |
-| Side effects | Wrong coroutine scope, bad `LaunchedEffect` keys | Correct effect selection and lifecycle-aware keys |
-| APIs | Hallucinates parameters that don't exist | Checks against actual source before suggesting |
-| Multiplatform | Uses Android-only APIs in shared code | Uses `expect`/`actual`, `Res.*` resources, platform-correct patterns |
-| Design-to-code | Literal Figma node translation, wrong modifier ordering | Semantic M3 components, correct ordering, theme tokens |
-| Crash safety | No defensive patterns | Guards against zero-size DrawScope, duplicate keys, stale `derivedStateOf` |
+| 状态 | 处处 `remember { mutableStateOf() }`，即便 `derivedStateOf` 或 `rememberSaveable` 才是正解 | 为每种场景挑选合适的状态原语 |
+| 性能 | 生成每帧都重组的代码 | 应用稳定性注解、延迟读取、列表 `key {}` |
+| 导航 | 字符串路由（已弃用） | 基于 `@Serializable` 路由类的类型安全路由 |
+| Modifier | 顺序随意，会漏掉「`clickable` 必须在 `padding` 之前」这类 Bug | 给出正确顺序并附带原因 |
+| 副作用 | 协程作用域用错、`LaunchedEffect` key 选错 | 正确选择副作用 API 并使用生命周期感知的 key |
+| API | 杜撰不存在的参数 | 推荐前先核对真实源码 |
+| 多平台 | 在公共代码里用了仅 Android 才有的 API | 使用 `expect`/`actual`、`Res.*` 资源以及平台正确的写法 |
+| 设计稿到代码 | 直译 Figma 节点、Modifier 顺序错乱 | 使用语义化 M3 组件、正确顺序、主题 token |
+| 崩溃防御 | 无防御性写法 | 防范零尺寸 DrawScope、重复 key、过期的 `derivedStateOf` |
 
-## What's covered
+## 覆盖范围
 
-| Topic | What the agent learns |
+| 主题 | Agent 能学到什么 |
 |---|---|
-| State management | `remember`, `mutableStateOf`, `derivedStateOf`, `rememberSaveable`, state hoisting, `snapshotFlow` |
-| View composition | Structuring composables, slot APIs, `@Preview` patterns, extraction rules |
-| Performance | Recomposition skipping, `@Stable`/`@Immutable`, deferred reads, baseline profiles, benchmarking |
-| Navigation | Type-safe routes, `NavHost`, deep links, shared element transitions, back stack |
-| Animation | `animate*AsState`, `AnimatedVisibility`, `Crossfade`, `updateTransition`, shared transitions, 9 recipes (shimmer, swipe-to-dismiss, etc.), gesture-driven patterns, Figma curve mapping |
-| Lists and scrolling | `LazyColumn`/`LazyRow`/`LazyGrid`, `Pager`, `key {}`, `contentType`, scroll state |
-| Side effects | `LaunchedEffect`, `DisposableEffect`, `SideEffect`, `rememberCoroutineScope` |
-| Modifiers | Ordering rules, custom modifiers, `Modifier.Node` migration |
-| Theming | `MaterialTheme`, `ColorScheme`, dynamic color, `Typography`, shapes, dark theme |
-| Accessibility | Semantics, content descriptions, traversal order, touch targets, TalkBack |
-| CompositionLocals | `LocalContext`, `LocalDensity`, custom locals, when to use vs. parameter passing |
-| Deprecated patterns | Removed APIs, migration paths from older Compose versions |
-| **Styles API (experimental)** | `Style {}`, `MutableStyleState`, `Modifier.styleable()`, composition, theme integration, alpha06 gotchas |
-| **Design-to-code** | Composable decomposition algorithm, Figma property mapping, spacing ownership, modifier ordering, design tokens |
-| **Production crash playbook** | 6 crash patterns with root cause + fix, defensive patterns, production state/performance rules |
-| **Compose Multiplatform** | CMP architecture, `expect`/`actual`, `Res.*` resources, API availability matrix, migration guide |
-| **Platform specifics** | Desktop (Window, Tray, MenuBar), iOS (UIKitView, gotchas), Web/WASM (canvas limitations) |
-| **TV Compose** | TV Material3 (Surface, Cards, Carousel, NavigationDrawer, TabRow), focus system, D-pad navigation, theming, immersive list, TVProvider |
-| **M3 Motion** | All duration tokens (`DurationShort1–4`, `DurationMedium1–4`, `DurationLong1–4`, `DurationExtraLong1–4`), easing tokens with CubicBezierEasing values, `MotionScheme` API (`defaultSpatialSpec`, `defaultEffectsSpec`), Compose API mapping, decision tree, PR review flags |
-| **Atomic design** | 5-level hierarchy (tokens, atoms, molecules, organisms, templates) mapped to Compose, M3 wrapper patterns, custom atom patterns, slot API contracts, token layer, anti-patterns |
-| Source code | Actual `.kt` from `androidx/androidx` and `compose-multiplatform-core` for runtime, UI, foundation, material3, navigation, CMP |
+| 状态管理 | `remember`、`mutableStateOf`、`derivedStateOf`、`rememberSaveable`、状态提升、`snapshotFlow` |
+| 视图组合 | 组合函数的结构、Slot API、`@Preview` 用法、提取规则 |
+| 性能 | 重组跳过、`@Stable`/`@Immutable`、延迟读取、Baseline Profile、基准测试 |
+| 导航 | 类型安全路由、`NavHost`、深链接、共享元素过渡、回退栈 |
+| 动画 | `animate*AsState`、`AnimatedVisibility`、`Crossfade`、`updateTransition`、共享过渡，9 个动画配方（闪光、滑动删除等）、手势驱动模式、Figma 曲线映射 |
+| 列表与滚动 | `LazyColumn`/`LazyRow`/`LazyGrid`、`Pager`、`key {}`、`contentType`、滚动状态 |
+| 副作用 | `LaunchedEffect`、`DisposableEffect`、`SideEffect`、`rememberCoroutineScope` |
+| Modifier | 顺序规则、自定义 Modifier、`Modifier.Node` 迁移 |
+| 主题 | `MaterialTheme`、`ColorScheme`、动态色彩、`Typography`、Shapes、深色主题 |
+| 无障碍 | Semantics、内容描述、遍历顺序、触摸目标、TalkBack |
+| CompositionLocal | `LocalContext`、`LocalDensity`、自定义 Local，何时用 vs 直接传参 |
+| 已弃用模式 | 已移除的 API、旧版 Compose 的迁移路径 |
+| **Styles API（实验）** | `Style {}`、`MutableStyleState`、`Modifier.styleable()`、组合、主题集成、alpha06 的注意点 |
+| **设计稿到代码** | 组合函数拆解算法、Figma 属性映射、间距归属、Modifier 顺序、Design Token |
+| **生产崩溃手册** | 6 种崩溃模式的根因 + 修复、防御性写法、生产环境的状态/性能规则 |
+| **Compose Multiplatform** | CMP 架构、`expect`/`actual`、`Res.*` 资源、API 可用性矩阵、迁移指南 |
+| **平台相关** | 桌面（Window、Tray、MenuBar）、iOS（UIKitView 与坑点）、Web/WASM（Canvas 限制） |
+| **TV Compose** | TV Material3（Surface、Cards、Carousel、NavigationDrawer、TabRow）、焦点系统、D-pad 导航、主题、沉浸式列表、TVProvider |
+| **M3 Motion** | 全部时长 token（`DurationShort1–4`、`DurationMedium1–4`、`DurationLong1–4`、`DurationExtraLong1–4`）、带 CubicBezierEasing 数值的缓动 token、`MotionScheme` API（`defaultSpatialSpec`、`defaultEffectsSpec`）、Compose API 映射、决策树、PR 评审检查项 |
+| **原子化设计** | 五层结构（token、原子、分子、有机体、模板）映射到 Compose、M3 包装模式、自定义原子模式、Slot API 契约、Token 层、反模式 |
+| 源代码 | `androidx/androidx` 与 `compose-multiplatform-core` 的真实 `.kt` 源码，覆盖 runtime、UI、foundation、material3、navigation、CMP |
 
-## How it works
+## 工作原理
 
 ```
-You ask about Compose
+你提了一个 Compose 问题
         |
         v
-  AI reads SKILL.md (workflow + checklists)
+  AI 读取 SKILL.md（工作流 + 检查清单）
         |
         v
-  Consults the right reference file
+  根据问题查阅对应参考文件
         |
         +-- state-management.md
         +-- performance.md
@@ -103,65 +103,65 @@ You ask about Compose
         +-- multiplatform.md
         +-- platform-specifics.md
         +-- tv-compose.md
-        +-- ... (20 guides total)
+        +-- ...（共 20 份指南）
         |
         +-- source-code/
               +-- runtime-source.md
               +-- material3-source.md
               +-- cmp-source.md
-              +-- ... (6 source files)
+              +-- ...（共 6 份源码）
 ```
 
-**Layer 1: guidance docs** (19 files) — practical references with patterns, pitfalls, and do/don't examples. This is what the agent reads first.
+**第一层：指南文档**（19 份）—— 实用参考，附带模式、坑点、do/don't 示例。Agent 首先读这些。
 
-**Layer 2: source code receipts** (6 files) — the actual Kotlin source from `androidx/androidx` and `compose-multiplatform-core`. When the agent needs to verify an implementation detail rather than guess, it reads these.
+**第二层：源码凭据**（6 份）—— 来自 `androidx/androidx` 与 `compose-multiplatform-core` 的真实 Kotlin 源码。当 Agent 需要核对实现细节而不是猜测时，会读这些。
 
-## File structure
+## 文件结构
 
 ```
 skills/compose-expert/
-├── SKILL.md                              # Main workflow + checklists
+├── SKILL.md                              # 主工作流 + 检查清单
 └── references/
-    ├── state-management.md               # State, remember, hoisting, derivedStateOf
-    ├── view-composition.md               # Structuring composables, slots, previews
-    ├── modifiers.md                      # Modifier ordering, custom modifiers, Modifier.Node
-    ├── side-effects.md                   # LaunchedEffect, DisposableEffect, SideEffect
-    ├── composition-locals.md             # CompositionLocal, LocalContext, custom locals
-    ├── lists-scrolling.md                # LazyColumn/Row/Grid, Pager, keys, contentType
-    ├── navigation.md                     # NavHost, type-safe routes, deep links
-    ├── animation.md                      # animate*AsState, AnimatedVisibility, transitions
-    ├── theming-material3.md              # MaterialTheme, ColorScheme, dynamic color
-    ├── performance.md                    # Recomposition, stability, benchmarking
-    ├── accessibility.md                  # Semantics, content descriptions, testing
-    ├── deprecated-patterns.md            # Removed APIs, migration paths
-    ├── styles-experimental.md           # Styles API (@ExperimentalFoundationStyleApi)
-    ├── design-to-compose.md             # Figma/screenshot decomposition, property mapping
-    ├── production-crash-playbook.md     # Crash patterns, defensive coding, production rules
-    ├── multiplatform.md                 # CMP architecture, expect/actual, Res.*, migration
-    ├── platform-specifics.md            # Desktop, iOS, Web/WASM platform APIs and gotchas
-    ├── tv-compose.md                    # Android TV: tv-material, Carousel, focus, D-pad
-    ├── atomic-design.md                 # Atomic design system: tokens, atoms, molecules, organisms, templates
-    └── source-code/                      # Actual .kt source
-        ├── runtime-source.md             # Composer, Recomposer, State, Effects
-        ├── ui-source.md                  # AndroidCompositionLocals, Modifier, Layout
-        ├── foundation-source.md          # LazyList, BasicTextField, Gestures
-        ├── material3-source.md           # MaterialTheme, all M3 components
-        ├── navigation-source.md          # NavHost, ComposeNavigator
-        └── cmp-source.md                # Window, UIKitView, ComposeViewport, Resources
+    ├── state-management.md               # 状态、remember、提升、derivedStateOf
+    ├── view-composition.md               # 组合函数结构、Slot、Preview
+    ├── modifiers.md                      # Modifier 顺序、自定义、Modifier.Node
+    ├── side-effects.md                   # LaunchedEffect、DisposableEffect、SideEffect
+    ├── composition-locals.md             # CompositionLocal、LocalContext、自定义 Local
+    ├── lists-scrolling.md                # LazyColumn/Row/Grid、Pager、key、contentType
+    ├── navigation.md                     # NavHost、类型安全路由、深链接
+    ├── animation.md                      # animate*AsState、AnimatedVisibility、过渡
+    ├── theming-material3.md              # MaterialTheme、ColorScheme、动态色彩
+    ├── performance.md                    # 重组、稳定性、基准测试
+    ├── accessibility.md                  # Semantics、内容描述、测试
+    ├── deprecated-patterns.md            # 移除的 API、迁移路径
+    ├── styles-experimental.md           # Styles API（@ExperimentalFoundationStyleApi）
+    ├── design-to-compose.md             # Figma/截图拆解、属性映射
+    ├── production-crash-playbook.md     # 崩溃模式、防御性写法、生产规则
+    ├── multiplatform.md                 # CMP 架构、expect/actual、Res.*、迁移
+    ├── platform-specifics.md            # 桌面、iOS、Web/WASM 平台 API 与坑点
+    ├── tv-compose.md                    # Android TV：tv-material、Carousel、焦点、D-pad
+    ├── atomic-design.md                 # 原子化设计系统：token、原子、分子、有机体、模板
+    └── source-code/                      # 真实 .kt 源码
+        ├── runtime-source.md             # Composer、Recomposer、State、Effects
+        ├── ui-source.md                  # AndroidCompositionLocals、Modifier、Layout
+        ├── foundation-source.md          # LazyList、BasicTextField、Gestures
+        ├── material3-source.md           # MaterialTheme、所有 M3 组件
+        ├── navigation-source.md          # NavHost、ComposeNavigator
+        └── cmp-source.md                # Window、UIKitView、ComposeViewport、Resources
 ```
 
-## Setup
+## 接入方式
 
-The skill is just markdown files. Every tool below reads the same content. Pick yours.
+本 Skill 就是一组 Markdown 文件，下面任何工具读到的都是同一份内容，按你用的工具选一种即可。
 
 ---
 
 ### Claude Code
 
-Skills are file-based — Claude Code discovers them automatically from `~/.claude/skills/` (personal) or `.claude/skills/` (project-specific).
+Skill 是文件驱动的 —— Claude Code 会自动从 `~/.claude/skills/`（个人）或 `.claude/skills/`（项目）发现它们。
 
-**Personal skill (available in all your projects):**
-> Clone the repo and copy the skill into your personal skills directory:
+**个人 Skill（在所有项目中可用）：**
+> 克隆仓库并把 Skill 复制到个人 Skill 目录：
 
 ```bash
 git clone https://github.com/aldefy/compose-skill.git /tmp/compose-skill
@@ -169,9 +169,9 @@ mkdir -p ~/.claude/skills
 cp -r /tmp/compose-skill/skills/compose-expert ~/.claude/skills/
 ```
 
-**Project-specific skill (just one project):**
+**项目 Skill（仅当前项目）：**
 
-> Clone the repo and copy the skill into your project's `.claude/skills` directory:
+> 克隆仓库并把 Skill 复制到项目的 `.claude/skills` 目录：
 
 ```bash
 git clone https://github.com/aldefy/compose-skill.git /tmp/compose-skill
@@ -179,13 +179,13 @@ mkdir -p .claude/skills
 cp -r /tmp/compose-skill/skills/compose-expert .claude/skills/
 ```
 
-No CLI command or config file needed. Claude Code picks up `SKILL.md` from these directories automatically and triggers when you mention Compose, `@Composable`, `remember`, `LazyColumn`, `NavHost`, etc.
+不需要任何 CLI 命令或配置文件。Claude Code 会自动从这些目录读取 `SKILL.md`，并在你提到 Compose、`@Composable`、`remember`、`LazyColumn`、`NavHost` 等关键词时触发。
 
 ---
 
-### Codex CLI (OpenAI)
+### Codex CLI（OpenAI）
 
-Add an `AGENTS.md` file to your project root:
+在项目根目录新增一个 `AGENTS.md` 文件：
 
 ```markdown
 # AGENTS.md
@@ -196,19 +196,19 @@ For all Compose/Android UI tasks, follow the instructions in
 files in `skills/compose-expert/references/` before answering.
 ```
 
-Add the skill to your project as a submodule:
+把 Skill 作为子模块添加到项目：
 
 ```bash
 git submodule add https://github.com/aldefy/compose-skill.git .compose-skill
 ```
 
-Codex discovers `AGENTS.md` files automatically from the git root down to the current directory.
+Codex 会自动从 git 根目录到当前目录沿路径发现 `AGENTS.md`。
 
 ---
 
-### Gemini CLI (Google)
+### Gemini CLI（Google）
 
-Add to `GEMINI.md` in your project root:
+在项目根目录的 `GEMINI.md` 中加入：
 
 ```markdown
 # GEMINI.md
@@ -227,7 +227,7 @@ For implementation details, check actual source code in
 `skills/compose-expert/references/source-code/`.
 ```
 
-Add as a submodule:
+作为子模块添加：
 
 ```bash
 git submodule add git@github.com:aldefy/compose-skill.git .compose-skill
@@ -237,26 +237,26 @@ git submodule add git@github.com:aldefy/compose-skill.git .compose-skill
 
 ### Google Antigravity
 
-Antigravity automatically discovers skills from workspace or global skill folders. The `skills/compose-expert` directory acts as a complete, ready-to-use Antigravity skill since it contains the needed `SKILL.md` file with a YAML frontmatter description.
+Antigravity 会自动从工作区或全局 Skill 目录发现 Skill。`skills/compose-expert` 已经包含了带 YAML frontmatter description 的 `SKILL.md`，本身就是一个完整可用的 Antigravity Skill。
 
-**Workspace skill (project-specific):**
+**工作区 Skill（仅当前项目）：**
 
 ```bash
-# Clone the repo
+# 克隆仓库
 git clone https://github.com/aldefy/compose-skill.git /tmp/compose-skill
 
-# Copy into your project's .agents/skills directory
+# 复制到项目的 .agents/skills 目录
 mkdir -p .agents/skills
 cp -r /tmp/compose-skill/skills/compose-expert .agents/skills/compose-expert
 ```
 
-**Global skill (available in all your projects):**
+**全局 Skill（在所有项目中可用）：**
 
 ```bash
-# Clone the repo
+# 克隆仓库
 git clone https://github.com/aldefy/compose-skill.git /tmp/compose-skill
 
-# Copy into your global Antigravity skills directory
+# 复制到全局 Antigravity Skill 目录
 mkdir -p ~/.gemini/antigravity/skills
 cp -r /tmp/compose-skill/skills/compose-expert ~/.gemini/antigravity/skills/compose-expert
 ```
@@ -265,7 +265,7 @@ cp -r /tmp/compose-skill/skills/compose-expert ~/.gemini/antigravity/skills/comp
 
 ### Cursor
 
-Create `.cursor/rules/compose-skill.mdc`:
+新建 `.cursor/rules/compose-skill.mdc`：
 
 ```markdown
 ---
@@ -278,13 +278,13 @@ for all Compose-related code. Consult reference files in
 `skills/compose-expert/references/` before suggesting patterns.
 ```
 
-Or paste the contents of `SKILL.md` into **Settings > Rules for AI**.
+或者把 `SKILL.md` 内容直接粘到 **Settings > Rules for AI**。
 
 ---
 
 ### GitHub Copilot
 
-Add to `.github/copilot-instructions.md`:
+在 `.github/copilot-instructions.md` 中加入：
 
 ```markdown
 ## Jetpack Compose
@@ -298,7 +298,7 @@ and source-code-backed guidance.
 
 ### Windsurf
 
-Create `.windsurf/rules/compose-skill.md` in your project root:
+在项目根目录新建 `.windsurf/rules/compose-skill.md`：
 
 ```markdown
 For all Jetpack Compose tasks, follow the workflow in
@@ -306,13 +306,13 @@ For all Jetpack Compose tasks, follow the workflow in
 files in `skills/compose-expert/references/` before answering.
 ```
 
-> **Note:** The legacy `.windsurfrules` file also works but `.windsurf/rules/` is the current approach.
+> **说明：** 旧的 `.windsurfrules` 文件仍然可用，但当前推荐 `.windsurf/rules/`。
 
 ---
 
 ### Amazon Q Developer
 
-Add to `.amazonq/rules/compose.md`:
+在 `.amazonq/rules/compose.md` 中加入：
 
 ```markdown
 For all Jetpack Compose tasks, follow the workflow in
@@ -322,42 +322,42 @@ files in `skills/compose-expert/references/` before answering.
 
 ---
 
-### Any other AI coding tool
+### 其它任意 AI 编程工具
 
-It's just markdown. Clone this repo into your project (or add as a submodule), then point your tool's instruction file at `skills/compose-expert/SKILL.md`. The agent reads `SKILL.md` for the workflow and pulls from `references/` as needed.
+它就是一组 Markdown，把仓库克隆到项目（或作为子模块），然后让你的工具读 `skills/compose-expert/SKILL.md` 即可。Agent 会先读 `SKILL.md` 的工作流，再按需读 `references/` 下的内容。
 
-## Quick example
+## 快速示例
 
-After setup, just talk to your AI assistant normally:
+接入完成后，正常和 AI 对话即可：
 
 ```
 "My LazyColumn is janky when scrolling — help me fix it"
 ```
 
-What happens:
-1. Agent reads `SKILL.md` for the workflow
-2. Pulls in `references/lists-scrolling.md` and `references/performance.md`
-3. Checks your code for missing `key {}`, unstable item types, heavy compositions in item blocks
-4. If something's unclear, verifies against `references/source-code/foundation-source.md`
-5. Gives you a fix based on the actual `LazyList` implementation
+发生的事情：
+1. Agent 读取 `SKILL.md` 中的工作流
+2. 拉取 `references/lists-scrolling.md` 和 `references/performance.md`
+3. 检查代码里有没有缺 `key {}`、Item 类型不稳定、Item 块里塞了重组合的内容
+4. 如果有不确定的地方，去对照 `references/source-code/foundation-source.md`
+5. 基于真实的 `LazyList` 实现给出修复方案
 
-No hallucinated APIs. No guessed behavior.
+不会编造 API，也不会瞎猜行为。
 
-## Source
+## 来源
 
-Source code comes from [`androidx/androidx`](https://github.com/androidx/androidx/tree/androidx-main/compose) and [`JetBrains/compose-multiplatform-core`](https://github.com/JetBrains/compose-multiplatform-core) under Apache License 2.0. The guidance docs are original analysis of those sources plus official documentation.
+源码来自 [`androidx/androidx`](https://github.com/androidx/androidx/tree/androidx-main/compose) 和 [`JetBrains/compose-multiplatform-core`](https://github.com/JetBrains/compose-multiplatform-core)，遵循 Apache License 2.0。指南文档是基于这些源码与官方文档的原创分析。
 
-## Contributing
+## 贡献
 
-PRs welcome, especially:
-- Additional platform-specific gotchas and workarounds
-- New animation recipes for common UI patterns
-- Production crash patterns from real apps
-- Corrections based on newer Compose/CMP releases
-- Auto-update tooling for tracking new releases
+欢迎 PR，特别是：
+- 更多平台相关的坑点和绕坑写法
+- 常见 UI 模式的新动画配方
+- 真实应用中的生产崩溃模式
+- 跟进新版 Compose/CMP 的修订
+- 用于跟踪新版本的自动更新工具
 
-## License
+## 许可证
 
-MIT — see [LICENSE](LICENSE).
+MIT —— 见 [LICENSE](LICENSE)。
 
-Source code from `androidx/androidx` is Apache License 2.0, copyright The Android Open Source Project. Source code from `compose-multiplatform-core` is Apache License 2.0, copyright JetBrains s.r.o.
+`androidx/androidx` 的源码遵循 Apache License 2.0，版权归 The Android Open Source Project 所有。`compose-multiplatform-core` 的源码遵循 Apache License 2.0，版权归 JetBrains s.r.o. 所有。
